@@ -59,18 +59,27 @@ main() {
 char 
 **get_input(char *input) {
     char **command = malloc(8 * sizeof(char *));
-    char *separator = " ";
-    char *parsed;
     int index = 0;
+    char *p = input;
     
-    parsed = strtok(input, separator);
-    while (parsed != NULL) {
-        command[index] = parsed;
-        index++;
-        
-        parsed = strtok(NULL, separator);
+    while (*p != '\0') {
+        /* skip leading spaces */
+        while (*p == ' ') p++;
+        if (*p == '\0') break;
+
+        if (*p == '"') { /* detect and collect quote */
+            command[index++] = p;
+            p++;
+            while (*p != '"' && *p != '\0') p++;
+            if (*p == '"') *p++;
+            if (*p == ' ') *p++ = '\0';
+        } else { /* collect normal token */
+            command[index++] = p;
+            while (*p != ' ' && *p != '\0') p++;
+            if (*p == ' ') *p++ = '\0';
+        }
     }
-    
+
     command[index] = NULL;
     return command;
 }
