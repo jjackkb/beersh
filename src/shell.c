@@ -71,7 +71,7 @@ char
             command[index++] = p;
             p++;
             while (*p != '"' && *p != '\0') p++;
-            if (*p == '"') *p++;
+            if (*p == '"') p++;
             if (*p == ' ') *p++ = '\0';
         } else { /* collect normal token */
             command[index++] = p;
